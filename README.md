@@ -1,8 +1,8 @@
 | Business Understanding  |  Status  |
 | ------------------- | ------------------- |
-|  Analysis of requirements with the end user |   |
-|  Definition of business goals  |   |
-|  Translation of business goals into data mining goals | |
+|  Analysis of requirements with the end user | 3  |
+|  Definition of business goals  | 3  |
+|  Translation of business goals into data mining goals | 3 |
 
 | Data Understanding  |  Status  |
 | ------------------- | ------------------- |

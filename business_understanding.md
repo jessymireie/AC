@@ -1,6 +1,7 @@
 # Business Understanding
 
 ## Analysis of requirements with the end user
+The bank in question is from the Czech Republic, as are its clients. The records are from the 1990's - the loans from the training set date from 1993 until 1996 whilst the testing dataset contains loan requests exclusively from the year 1997.
 Using the bank data stored of its clients, the bank is looking to determine if a client is predisposed to have their loan request approved. From the bank's perspective, this probably would be approached using differents method. Based on our reasearch, several aspects come to play, such as: 
 - credit, salary and employment history;
 - crash flow and past expenses;

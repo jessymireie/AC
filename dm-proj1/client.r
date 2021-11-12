@@ -15,13 +15,13 @@ clients <- clients %>%
 
 ####
 
-women <- dplyr::filter(clients, gender == "F")
-men <- dplyr::filter(clients, gender == "M")
+#women <- dplyr::filter(clients, gender == "F")
+#men <- dplyr::filter(clients, gender == "M")
 
 
-print("Women Stats")
-print(summarise(women,nbWomen = dplyr::n(), avgAge = mean(age), youngest = min(age), oldest = max(age)))
+#print("Women Stats")
+#print(summarise(women,nbWomen = dplyr::n(), avgAge = mean(age), youngest = min(age), oldest = max(age)))
 # quantile(age)
 
-print("Men Stats")
-print(summarise(men, nbMen = dplyr::n(), avgAge = mean(age), youngest = min(age), oldest = max(age)))
+#print("Men Stats")
+#print(summarise(men, nbMen = dplyr::n(), avgAge = mean(age), youngest = min(age), oldest = max(age)))

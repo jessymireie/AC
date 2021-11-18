@@ -94,22 +94,22 @@ ggplot(df, aes(x = status, y = age)) +
 
 # Region's Impact on loan's success 
 ggplot(df, aes(x = region, group = status, fill = status)) +
-  geom_bar() +
+  geom_bar(position = "fill") +
   ggtitle("Region impact on loan's success")
 
 # Gender's Impact on loan's success 
 ggplot(df, aes(x = gender, group = status, fill = status)) +
-  geom_bar() +
+  geom_bar(position = "fill", stat = "percentage",) +
   ggtitle("Gender's impact on loan's success")
 
 # Account's Frequency Access Impact on loan's success 
 ggplot(df, aes(x = account_freq_access, group = status, fill = status)) +
-  geom_bar() +
+  geom_bar(position = "fill") +
   ggtitle("Account's Frequency Access impact on loan's success")
 
 # Loan's Date Impact on loan's success 
 ggplot(df, aes(x = loan_date, group = status, fill = status)) +
-  geom_bar() +
+  geom_bar(position = "fill") +
   ggtitle("Loan's Date impact on loan's success")
 
 ####

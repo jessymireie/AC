@@ -116,4 +116,4 @@ df <- df %>%
 # disp_id is now useless
 df <- subset(df, select = -disp_id )
 
-write.csv(df,"C:/Users/xanaf/Desktop/feup/4 ano/1 semestre/ac/repos/AC/dm-proj1/final.csv", row.names = FALSE)                           
+#write.csv(df,"C:/Users/xanaf/Desktop/feup/4 ano/1 semestre/ac/repos/AC/dm-proj1/final.csv", row.names = FALSE)                           

@@ -67,6 +67,26 @@ cards <- cards %>%
 sum(duplicated(disp$client_id))
 
 
+loans <- loans %>%
+  # Change status to Successful (1) and Unsuccessful(-1)
+  mutate(status = ifelse(status == 1, "Successful", "Unsuccessful")) %>%
+  # Create 3 letter abbreviation of month column based off date column
+  transform(monthNumber = (date %% 10000) %/% 100) %>%
+  mutate(month = case_when(
+    monthNumber == 1 ~ "Jan",
+    monthNumber == 2 ~ "Feb",
+    monthNumber == 3 ~ "Mar",
+    monthNumber == 4 ~ "Apr",
+    monthNumber == 5 ~ "May",
+    monthNumber == 6 ~ "Jun",
+    monthNumber == 7 ~ "Jul",
+    monthNumber == 8 ~ "Aug",
+    monthNumber == 9 ~ "Sep",
+    monthNumber == 10 ~ "Oct",
+    monthNumber == 11 ~ "Nov",
+    monthNumber == 12 ~ "Dec")) %>%
+  mutate(year = date %/% 10000)
+
 # create new dataframe containing all info
 df <- disp[,c("account_id","client_id", "disp_id")]
 #df$disp_id <- disp$disp_id[match(df$client_id, disp$client_id)]
@@ -75,11 +95,6 @@ df <- disp[,c("account_id","client_id", "disp_id")]
 df$gender <- clients$gender[match(df$client_id, clients$client_id)]
 df$age <- clients$age[match(df$client_id, clients$client_id)]
 df$district_id <- clients$district_id[match(df$client_id, clients$client_id)]
-
-#loans
-df$status <- loans$status[match(df$account_id, loans$account_id)]
-# removing clients who haven't requested any loans
-df <- na.omit(df)
 
 #district
 df$region <- districts$region[match(df$district_id, districts$code)]
@@ -104,14 +119,19 @@ df$card_issue_date <- cards$card_issue_date[match(df$disp_id, cards$disp_id)]
 df$card_type <- cards$type[match(df$disp_id, cards$disp_id)]
 
 #loans
-df$loan_date <- loans$date[match(df$account_id, loans$account_id)]
+#df$loan_date <- loans$date[match(df$account_id, loans$account_id)]
 df$loan_amount <- loans$amount[match(df$account_id, loans$account_id)]
 df$loan_duration <- loans$duration[match(df$account_id, loans$account_id)]
 df$payments <- loans$payments[match(df$account_id, loans$account_id)]
+df$status <- loans$status[match(df$account_id, loans$account_id)]
+df$loan_date_month <- loans$month[match(df$account_id, loans$account_id)]
+df$loan_date_year <- loans$year[match(df$account_id, loans$account_id)]
+df$loan_date_monthNB <- loans$monthNumber[match(df$account_id, loans$account_id)]
+# removing clients who haven't requested any loans
+df <- na.omit(df)
 # Simplifying loan date into MMYY only
-df <- df %>% 
-  mutate(loan_date = loan_date%/%100)
-
+#df <- df %>% 
+#  mutate(loan_date = loan_date%/%100)
 
 # disp_id is now useless
 df <- subset(df, select = -disp_id )

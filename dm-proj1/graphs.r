@@ -26,26 +26,7 @@ df <- df %>%
 # geom_violin
 
 ###################################
-loans <- read_delim("../ficheiros_competicao/loan_train.csv", delim = ";")
-loans <- loans %>%
-  # Change status to Successful (1) and Unsuccessful(-1)
-  mutate(status = ifelse(status == 1, "Successful", "Unsuccessful")) %>%
-  # Create 3 letter abbreviation of month column based off date column
-  transform(monthNumber = (date %% 10000) %/% 100) %>%
-  mutate(month = case_when(
-    monthNumber == 1 ~ "Jan",
-    monthNumber == 2 ~ "Feb",
-    monthNumber == 3 ~ "Mar",
-    monthNumber == 4 ~ "Apr",
-    monthNumber == 5 ~ "May",
-    monthNumber == 6 ~ "Jun",
-    monthNumber == 7 ~ "Jul",
-    monthNumber == 8 ~ "Aug",
-    monthNumber == 9 ~ "Sep",
-    monthNumber == 10 ~ "Oct",
-    monthNumber == 11 ~ "Nov",
-    monthNumber == 12 ~ "Dec")) %>%
-  mutate(year = date %/% 10000)
+
 
 ggplot(loans, aes(x = status, y = amount)) +
   geom_boxplot() +
@@ -207,6 +188,7 @@ df_new <- df_new %>%
 df_new <- subset(df_new, select = -account_id )
 df_new <- subset(df_new, select = -client_id )
 df_new <- subset(df_new, select = -district_id )
+df_new <- subset(df_new, select = -loan_date_month )
 
 # Dropping the card attributes here, since 94.8% of their entries would be na
 df_new <- subset(df_new, select = -card_type )

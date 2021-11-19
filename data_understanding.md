@@ -5,12 +5,10 @@
 ## Data Visualization
 
 ### Correlation Matrixs
-<!--Note: var 1 e var 2, definir nome; Escolher um dos graficos!-->
-#### **Comparison between Districs variables**
-![Correlation Matrix](dm-proj1/graphs/CorrelationMatrixInitial.png)
+#### **Comparison between all variables**
 ![Correlation Matrix](dm-proj1/graphs/CorrelationMatrixInitial2.png)
 
-#### **Comparison between all variables**
+#### **Comparison between districs variables**
 ![Correlation Matrix Disctricts](dm-proj1/graphs/CorrMatrixDistricts.png)
 
 #### **Comparison between Loan variables**
@@ -36,9 +34,6 @@
 ![Status/Payments Boxplot](dm-proj1/graphs/Status-Payments-Boxplot.png)
 
 ### BarPlot
-#### **Month's impact on loan's success**
-![Status/MonthLoan Boxplot](dm-proj1/graphs/Status-MonthLoan-Barplot.png)
-
 #### **Region's impact on loan's success**
 ![Status/Region Boxplot](dm-proj1/graphs/Status-Region-Barplot.png)
 
@@ -47,6 +42,25 @@
 
 #### **Year's impact on loans**
 ![Year Impact Loan](dm-proj1/graphs/YearImpactLoan.png)
+
+### Statistics
+#### **Number of different card owners**
++ classic: 127
++ gold: 9
++ junior: 41
+
+#### **Number of users with disponents**
++ disponent: 869
++ owner: 4500
+
+#### **Number of transactions and users**
+fazer grafico  com os valores agrupados: 369/9=41
+ntrans/nusers
++ 1/74
++ 2/22
++ 3/53
++ 4/69
++ etc ao id 369
 
 ## Conclusion
 

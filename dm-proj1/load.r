@@ -127,6 +127,12 @@ df$status <- loans$status[match(df$account_id, loans$account_id)]
 df$loan_date_month <- loans$month[match(df$account_id, loans$account_id)]
 df$loan_date_year <- loans$year[match(df$account_id, loans$account_id)]
 df$loan_date_monthNB <- loans$monthNumber[match(df$account_id, loans$account_id)]
+
+# Add 3 binary attributes for each card type
+df <- transform(df, has_gold_card = if_else(card_type == "gold", 1, 0))
+df <- transform(df, has_classic_card = if_else(card_type == "classic", 1, 0))
+df <- transform(df, has_junior_card = if_else(card_type == "junior", 1, 0))
+
 # removing clients who haven't requested any loans
 df <- na.omit(df)
 # Simplifying loan date into MMYY only

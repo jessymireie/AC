@@ -153,55 +153,10 @@ qplot(age, data = df, geom = "density",
 
 ####
 
-# Creating a new dataframe purely numerical for correlation matrix calculations
-df_new <- df
-df_new <- df_new %>%
-  # Change status to Successful (1) and Unsuccessful(-1)
-  mutate(status = ifelse(status == "Successful", 1, -1)) 
-df_new <- df_new %>%
-  # Change gender to Female (1) and Male (-1)
-  mutate(gender = ifelse(gender == "F", 1, -1)) 
-df_new <- df_new %>%
-  # Change account frequency access to monthly issuance (1) and issuance after transaction (2) and weekly issuance (3)
-  mutate(account_freq_access = case_when(
-    account_freq_access == "monthly issuance" ~ 1,
-    account_freq_access == "issuance after transaction" ~ 2,
-    account_freq_access == "weekly issuance" ~ 3))
-df_new <- df_new %>%
-  # Change region to 
-  mutate(region = case_when(
-    region == "central Bohemia" ~ 1,
-    region == "east Bohemia" ~ 2,
-    region == "north Bohemia" ~ 3,
-    region == "north Moravia" ~ 4,
-    region == "Prague" ~ 5,
-    region == "south Bohemia" ~ 6,
-    region == "south Moravia" ~ 7, 
-    region == "west Bohemia" ~ 8))
-df_new <- df_new %>%
-  # Change account frequency access to monthly issuance (1) and issuance after transaction (2) and weekly issuance (3)
-  mutate(card_type = case_when(
-    card_type == "classic" ~ 1,
-    card_type == "gold" ~ 2,
-    card_type == "junior" ~ 3))
-
-df_new <- subset(df_new, select = -account_id )
-df_new <- subset(df_new, select = -client_id )
-df_new <- subset(df_new, select = -district_id )
-df_new <- subset(df_new, select = -loan_date_month )
-
-# Dropping the card attributes here, since 94.8% of their entries would be na
-df_new <- subset(df_new, select = -card_type )
-df_new <- subset(df_new, select = -card_issue_date )
-
-# Removing Null Values
-# not actually doing this now, bc card's attributes have a lot of na values
-df_new <- na.omit(df_new)
-
 
 # 1. Compute correlation
 # Can be run using 3 different methods : 1- pearson, 2- kendall, 3-spearman -- pearson is considered the most fitting overall
-cormat <- round(cor(df_new, method = "pearson"),2)
+cormat <- round(cor(df_num, method = "pearson"),2)
 # 2. Reorder the correlation matrix by 
 # Hierarchical clustering
 hc <- hclust(as.dist(1-cormat)/2)
@@ -240,7 +195,7 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 
 library("PerformanceAnalytics")
 # Overall Analytics, probably more useful of df with fewer columns
-chart.Correlation(df_new, histogram=TRUE, pch=19)
+chart.Correlation(df_num, histogram=TRUE, pch=19)
 
 #######################
 
@@ -252,7 +207,7 @@ corrplot(cormat, type = "upper", order = "hclust",
 #######################
 
 
-df_district <- df_new[,c("region","nb_inhabitants", "nb_cities", "ratio_urban_inhabitants", "average_salary", "nb_enterpreneurs_per1000", "unemployment95",  "crime95_S", "crime96_S")]
+df_district <- df_num[,c("region","nb_inhabitants", "nb_cities", "ratio_urban_inhabitants", "average_salary", "nb_enterpreneurs_per1000", "unemployment95",  "crime95_S", "crime96_S")]
 
 cormat <- round(cor(df_district, method = "pearson"),2)
 corrplot(cormat, type = "upper", order = "hclust", 
@@ -293,7 +248,7 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 
 ###########################################
 
-df_loans <- df_new[,c("gender","age", "average_salary", "loan_amount", "loan_duration", "payments", "status", "loan_date_year", "loan_date_monthNB")]
+df_loans <- df_num[,c("gender","age", "average_salary", "loan_amount", "loan_duration", "payments", "status", "loan_date_year", "loan_date_monthNB")]
 
 cormat <- round(cor(df_loans, method = "pearson"),2)
 corrplot(cormat, type = "upper", order = "hclust", 

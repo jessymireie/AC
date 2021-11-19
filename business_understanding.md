@@ -10,7 +10,7 @@ Using the bank data stored of its clients, the bank is looking to determine if a
 - characteristics of the loan request (duration, amount, etc).
 
 ## Definition of business goals
-The bank's motivation behind this would be to minimize its losses.
+The bank's main focus would be predicting beforehand which loan request should be accepted or not - this decision would relay on trying to understand which client's would be able to pay the requested loan amount in full and on time. The motivation behind only partaking in successful loans, would be to minimize the bank's losses (decrease its current deficit). The bank's current success rate regarding loan's outcomes is at 85.97561%. The desired result would be a 100% success rate. Although obtaining that result would be virtually impossible, the goal here would be to get as close to 100 as possible.
 
 
 ## Translation of business goals into data mining goals

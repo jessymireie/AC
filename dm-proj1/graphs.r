@@ -153,6 +153,7 @@ qplot(age, data = df, geom = "density",
 
 ####
 
+df_num <- subset(df_num, select = -status )
 
 # 1. Compute correlation
 # Can be run using 3 different methods : 1- pearson, 2- kendall, 3-spearman -- pearson is considered the most fitting overall
@@ -248,7 +249,7 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 
 ###########################################
 
-df_loans <- df_num[,c("gender","age", "average_salary", "loan_amount", "loan_duration", "payments", "status", "loan_date_year", "loan_date_monthNB")]
+df_loans <- df_num[,c("gender","age", "average_salary", "loan_amount", "loan_duration", "payments", "loan_date_year", "loan_date_monthNB")]
 
 cormat <- round(cor(df_loans, method = "pearson"),2)
 corrplot(cormat, type = "upper", order = "hclust", 

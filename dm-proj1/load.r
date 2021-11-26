@@ -237,3 +237,15 @@ df_num <- subset(df_num, select = -card_issue_date )
 df_num <- na.omit(df_num)
 
 ###################################################################################
+
+
+loans <- read_delim("ficheiros_competicao/loan_train.csv", delim = ";")
+accounts <- read_delim("ficheiros_competicao/account.csv", delim = ";")
+cards <- read_delim("ficheiros_competicao/card_train.csv", delim = ";")
+disp <- read_delim("ficheiros_competicao/disp.csv", delim = ";")
+
+
+new_df <- disp[,c("account_id", "disp_id")]
+new_df$status <- loans$status[match(new_df$account_id, loans$account_id)]
+new_df <- na.omit(new_df)
+new_df$card <- cards$type[match(new_df$disp_id, cards$disp_id)]

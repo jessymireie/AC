@@ -1,6 +1,8 @@
 library(tidyverse)
 library(dplyr)
 library(readr)
+library(psych)
+
 
 clients <- read.csv('ficheiros_competicao/client.csv',sep = ';', header=TRUE)
 trans <- read.csv('ficheiros_competicao/trans_train.csv',sep = ';', header=TRUE)
@@ -164,7 +166,8 @@ rm(account_district_client)
 rm(trans_by_month)
 
 #### HERE TEST
-trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
+trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
+#trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
 #trans_client_district_loan$datediff <- trans_client_district_loan$date.x
 trans_client_district_loan$datediff <- trans_client_district_loan$date.x - trans_client_district_loan$birthday
 
@@ -238,6 +241,8 @@ final$time_bf_loan <- complete_df$time_bf_loan[match(final$account_id, complete_
 final$age_at_loan <- complete_df$age_at_loan[match(final$account_id, complete_df$account_id)]
 final$card_num <- complete_df$card_num[match(final$account_id, complete_df$account_id)] 
 
+final$status <- complete_df$status[match(final$account_id, complete_df$account_id)] 
+
 #final$age <- complete_df$age[match(final$account_id, complete_df$account_id)]
 #final$gender <- complete_df$gender[match(final$account_id, complete_df$account_id)]
 #final$avg_salary <- complete_df$average.salary[match(final$account_id, complete_df$account_id)]
@@ -253,6 +258,6 @@ final$payments_loan <- complete_df$payments[match(final$account_id, complete_df$
 final <- subset(final, select = -loan_id )
 final <- subset(final, select = -account_id )
 
-# Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para nelhorar o modelo (?)
-write.csv(final,"final.csv", row.names = FALSE)
+# Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para melhorar o modelo (?)
+write.csv(final,"final_train.csv", row.names = FALSE)
 

@@ -255,8 +255,9 @@ final$payments_loan <- complete_df$payments[match(final$account_id, complete_df$
 
 
 # Remove IDs
-final <- subset(final, select = -loan_id )
-final <- subset(final, select = -account_id )
+#final <- subset(final, select = -loan_id )
+#final <- subset(final, select = -account_id )
+#final <- subset(final, select = -status )
 
 # Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para melhorar o modelo (?)
 write.csv(final,"final_train.csv", row.names = FALSE)

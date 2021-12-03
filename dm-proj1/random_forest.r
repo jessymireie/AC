@@ -41,7 +41,7 @@ export <- results[,c("loan_id", "status_neg_prob")]
 names(export)[names(export) == 'loan_id' ] <- 'Id'
 names(export)[names(export) == 'status_neg_prob' ] <- 'Predicted'
 
-write.csv(export,"results/rf_first.csv", row.names = FALSE)
+#write.csv(export,"results/rf_first.csv", row.names = FALSE)
 
 ##### GETTING MODEL ACCURACY
 

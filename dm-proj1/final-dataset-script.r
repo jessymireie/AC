@@ -166,8 +166,8 @@ rm(account_district_client)
 rm(trans_by_month)
 
 #### HERE TEST
-trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
-#trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
+#trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
+trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
 #trans_client_district_loan$datediff <- trans_client_district_loan$date.x
 trans_client_district_loan$datediff <- trans_client_district_loan$date.x - trans_client_district_loan$birthday
 
@@ -243,9 +243,21 @@ final$card_num <- complete_df$card_num[match(final$account_id, complete_df$accou
 
 final$status <- complete_df$status[match(final$account_id, complete_df$account_id)] 
 
-#final$age <- complete_df$age[match(final$account_id, complete_df$account_id)]
-#final$gender <- complete_df$gender[match(final$account_id, complete_df$account_id)]
-#final$avg_salary <- complete_df$average.salary[match(final$account_id, complete_df$account_id)]
+######
+
+final$age <- complete_df$age[match(final$account_id, complete_df$account_id)]
+final$gender <- complete_df$gender[match(final$account_id, complete_df$account_id)]
+final$avg_salary <- complete_df$average.salary[match(final$account_id, complete_df$account_id)]
+final$district_id <- complete_df$district_id[match(final$account_id, complete_df$account_id)]
+final$nb_inhabitants <- complete_df$no..of.inhabitants[match(final$account_id, complete_df$account_id)]
+final$nb_cities <- complete_df$no..of.cities[match(final$account_id, complete_df$account_id)]
+final$ratio_urban_inhabitants <- complete_df$ratio.of.urban.inhabitants[match(final$account_id, complete_df$account_id)]
+final$unemploymant_95 <- complete_df$unemploymant.rate..95[match(final$account_id, complete_df$account_id)]
+final$unemploymant_96 <- complete_df$unemploymant.rate..96[match(final$account_id, complete_df$account_id)]
+final$crime_95 <- complete_df$crimes95[match(final$account_id, complete_df$account_id)]
+final$crime_95 <- complete_df$crimes95[match(final$account_id, complete_df$account_id)]
+final$nb_entrepeneurs <- complete_df$no..of.enterpreneurs.per.1000.inhabitants[match(final$account_id, complete_df$account_id)]
+
 
 
 # Loans Info
@@ -257,8 +269,8 @@ final$payments_loan <- complete_df$payments[match(final$account_id, complete_df$
 # Remove IDs
 #final <- subset(final, select = -loan_id )
 #final <- subset(final, select = -account_id )
-#final <- subset(final, select = -status )
+final <- subset(final, select = -status )
 
 # Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para melhorar o modelo (?)
-write.csv(final,"final_train.csv", row.names = FALSE)
+write.csv(final,"complete_test.csv", row.names = FALSE)
 

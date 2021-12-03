@@ -41,7 +41,7 @@ export <- results[,c("loan_id", "status_neg_prob")]
 names(export)[names(export) == 'loan_id' ] <- 'Id'
 names(export)[names(export) == 'status_neg_prob' ] <- 'Predicted'
 
-write.csv(export,"results/rf_first_2.csv", row.names = FALSE)
+write.csv(export,"results/rf_first.csv", row.names = FALSE)
 
 ##### GETTING MODEL ACCURACY
 
@@ -68,3 +68,30 @@ y_test <- data_test$status
 predictions <- predict(model, x_test)
 # summarize results
 confusionMatrix(predictions, y_test)
+
+#Confusion Matrix and Statistics
+
+#Reference
+#Prediction -1  1
+#-1  4  1
+#1   5 55
+
+#Accuracy : 0.9077          
+#95% CI : (0.8098, 0.9654)
+#No Information Rate : 0.8615          
+#P-Value [Acc > NIR] : 0.1866          
+
+#Kappa : 0.5244          
+
+#Mcnemar's Test P-Value : 0.2207          
+                                          
+#           Sensitivity : 0.44444         
+#            Specificity : 0.98214         
+#        Pos Pred Value : 0.80000         
+#        Neg Pred Value : 0.91667         
+#             Prevalence : 0.13846         
+#         Detection Rate : 0.06154         
+#   Detection Prevalence : 0.07692         
+#     Balanced Accuracy : 0.71329         
+                                          
+#       'Positive' Class : -1  

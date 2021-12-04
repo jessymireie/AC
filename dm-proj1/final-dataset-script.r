@@ -166,9 +166,9 @@ rm(account_district_client)
 rm(trans_by_month)
 
 #### HERE TEST
-#trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
-trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
-#trans_client_district_loan$datediff <- trans_client_district_loan$date.x
+trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
+#trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
+
 trans_client_district_loan$datediff <- trans_client_district_loan$date.x - trans_client_district_loan$birthday
 
 names(trans_client_district_loan)[names(trans_client_district_loan) == 'no..of.commited.crimes..95' ] <- 'crimes95'
@@ -209,13 +209,10 @@ complete_df <- complete_df %>%
 #final <- complete_df
 #final <- subset(final, select = -account_id )
 
-#complete_df$time_between <- difftime(as.Date(complete_df$date_loan, "%y%m%d"), as.Date(complete_df$date_loan, "%y%m%d"), units = "days")
-
 
 # Keeping only some attributes for the final dataset
 
 final <- complete_df[,c("account_id","num_credit","num_withdrawal","max_credit","min_credit","avg_credit","median_credit","iqr_credit")]
-
 
 final$max_withdrawal <- complete_df$max_withdrawal[match(final$account_id, complete_df$account_id)]
 final$min_withdrawal <- complete_df$min_withdrawal[match(final$account_id, complete_df$account_id)]
@@ -255,22 +252,22 @@ final$ratio_urban_inhabitants <- complete_df$ratio.of.urban.inhabitants[match(fi
 final$unemploymant_95 <- complete_df$unemploymant.rate..95[match(final$account_id, complete_df$account_id)]
 final$unemploymant_96 <- complete_df$unemploymant.rate..96[match(final$account_id, complete_df$account_id)]
 final$crime_95 <- complete_df$crimes95[match(final$account_id, complete_df$account_id)]
-final$crime_95 <- complete_df$crimes95[match(final$account_id, complete_df$account_id)]
+final$crime_96 <- complete_df$crimes96[match(final$account_id, complete_df$account_id)]
 final$nb_entrepeneurs <- complete_df$no..of.enterpreneurs.per.1000.inhabitants[match(final$account_id, complete_df$account_id)]
 
-
+# crime_95 has 5 NA's, will replace this value by the district's equivalent in 96
+final$crime_95 <- ifelse(is.na(final$crime_95), final$crime_96, final$crime_95)
 
 # Loans Info
 final$loan_id <- complete_df$loan_id[match(final$account_id, complete_df$account_id)]
 final$duration_loan <- complete_df$duration[match(final$account_id, complete_df$account_id)]
 final$payments_loan <- complete_df$payments[match(final$account_id, complete_df$account_id)]
 
-
+summary(final)
 # Remove IDs
-#final <- subset(final, select = -loan_id )
-#final <- subset(final, select = -account_id )
-final <- subset(final, select = -status )
+final <- subset(final, select = -account_id )
+#final <- subset(final, select = -status )
 
 # Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para melhorar o modelo (?)
-write.csv(final,"complete_test.csv", row.names = FALSE)
+write.csv(final,"complete_train.csv", row.names = FALSE)
 

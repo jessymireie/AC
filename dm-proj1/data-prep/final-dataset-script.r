@@ -4,17 +4,17 @@ library(readr)
 library(psych)
 
 
-clients <- read.csv('ficheiros_competicao/client.csv',sep = ';', header=TRUE)
-trans <- read.csv('ficheiros_competicao/trans_train.csv',sep = ';', header=TRUE)
-account <- read.csv('ficheiros_competicao/account.csv',sep = ';', header=TRUE)
-district <- read.csv('ficheiros_competicao/district.csv',sep = ';', header=TRUE)
-disp <- read.csv('ficheiros_competicao/disp.csv',sep = ';', header=TRUE)
-loan <- read.csv('ficheiros_competicao/loan_train.csv',sep = ';', header=TRUE)
-card <- read.csv('ficheiros_competicao/card_train.csv', sep =';', header=TRUE)
+clients <- read.csv('./ficheiros_competicao/client.csv',sep = ';', header=TRUE)
+trans <- read.csv('./ficheiros_competicao/trans_train.csv',sep = ';', header=TRUE)
+account <- read.csv('./ficheiros_competicao/account.csv',sep = ';', header=TRUE)
+district <- read.csv('./ficheiros_competicao/district.csv',sep = ';', header=TRUE)
+disp <- read.csv('./ficheiros_competicao/disp.csv',sep = ';', header=TRUE)
+loan <- read.csv('./ficheiros_competicao/loan_train.csv',sep = ';', header=TRUE)
+card <- read.csv('./ficheiros_competicao/card_train.csv', sep =';', header=TRUE)
 ###
-loan_test <- read.csv('ficheiros_competicao/loan_test.csv',sep = ';', header=TRUE)
-card_test <- read.csv('ficheiros_competicao/card_test.csv', sep =';', header=TRUE)
-trans_test <- read.csv('ficheiros_competicao/trans_test.csv',sep = ';', header=TRUE)
+loan_test <- read.csv('./ficheiros_competicao/loan_test.csv',sep = ';', header=TRUE)
+card_test <- read.csv('./ficheiros_competicao/card_test.csv', sep =';', header=TRUE)
+trans_test <- read.csv('./ficheiros_competicao/trans_test.csv',sep = ';', header=TRUE)
 
 # Our complete_df dataset (to test will be composed of both the training and test data for the cards and transactions' info)
 card <- rbind(card_test, card)
@@ -166,8 +166,8 @@ rm(account_district_client)
 rm(trans_by_month)
 
 #### HERE TEST
-trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
-#trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
+#trans_client_district_loan <- left_join(loan, trans_client_district, 'account_id')
+trans_client_district_loan <- left_join(loan_test, trans_client_district, 'account_id')
 
 trans_client_district_loan$datediff <- trans_client_district_loan$date.x - trans_client_district_loan$birthday
 
@@ -255,8 +255,20 @@ final$crime_95 <- complete_df$crimes95[match(final$account_id, complete_df$accou
 final$crime_96 <- complete_df$crimes96[match(final$account_id, complete_df$account_id)]
 final$nb_entrepeneurs <- complete_df$no..of.enterpreneurs.per.1000.inhabitants[match(final$account_id, complete_df$account_id)]
 
+# Unemploymant_95 is stored as Char instead of Num
+df <- final[,c("unemploymant_95")]
+df[sapply(df, is.character)] <-lapply(df[sapply(df, is.character)], as.numeric)
+final$unemploymant_95 <- df$unemploymant_95
+rm(df)
+
 # crime_95 has 5 NA's, will replace this value by the district's equivalent in 96
 final$crime_95 <- ifelse(is.na(final$crime_95), final$crime_96, final$crime_95)
+# same for unemployment_95
+final$unemploymant_95 <- ifelse(is.na(final$unemploymant_95), final$unemploymant_96, final$unemploymant_95)
+
+# Fixing typo
+names(final)[names(final) == 'unemploymant_95' ] <- 'unemployment_95'
+names(final)[names(final) == 'unemploymant_96' ] <- 'unemployment_96'
 
 # Loans Info
 final$loan_id <- complete_df$loan_id[match(final$account_id, complete_df$account_id)]
@@ -266,8 +278,8 @@ final$payments_loan <- complete_df$payments[match(final$account_id, complete_df$
 summary(final)
 # Remove IDs
 final <- subset(final, select = -account_id )
-#final <- subset(final, select = -status )
+final <- subset(final, select = -status )
 
 # Este é o csv final onde vamos correr as nossas previsões, fazendo aqui as alterações para melhorar o modelo (?)
-write.csv(final,"complete_train.csv", row.names = FALSE)
+write.csv(final,"./complete_test.csv", row.names = FALSE)
 

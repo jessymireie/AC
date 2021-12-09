@@ -13,13 +13,13 @@ library(dplyr)
 library(readr)
 
 # Reading all files
-clients <- read_delim("ficheiros_competicao/client.csv", delim = ";")
-loans <- read_delim("ficheiros_competicao/loan_train.csv", delim = ";")
-accounts <- read_delim("ficheiros_competicao/account.csv", delim = ";")
-cards <- read_delim("ficheiros_competicao/card_train.csv", delim = ";")
-districts <- read_delim("ficheiros_competicao/district.csv", delim = ";")
-disp <- read_delim("ficheiros_competicao/disp.csv", delim = ";")
-transactions <- read_delim("ficheiros_competicao/trans_train.csv", delim = ";")
+clients <- read_delim("./ficheiros_competicao/client.csv", delim = ";")
+loans <- read_delim("./ficheiros_competicao/loan_train.csv", delim = ";")
+accounts <- read_delim("./ficheiros_competicao/account.csv", delim = ";")
+cards <- read_delim("./ficheiros_competicao/card_train.csv", delim = ";")
+districts <- read_delim("./ficheiros_competicao/district.csv", delim = ";")
+disp <- read_delim("./ficheiros_competicao/disp.csv", delim = ";")
+transactions <- read_delim("./ficheiros_competicao/trans_train.csv", delim = ";")
 
 
 # Cleaning District Dataframe
@@ -117,12 +117,32 @@ round(554*100/4500, digits=2)
 summary(loans)
 
 
+###########################
 
+#Number of loans
+nrow(loans)
 
+# Number of transactions
+nrow(trans)
 
+# How many cards for each unique type of card
+cards %>%
+  group_by(type) %>%
+  summarize(n = n())
 
+# How many Owners and Disponents
+disp %>%
+  group_by(type) %>%
+  summarize(n = n())
 
+# How many Clients per Account (max is 2)
+disp %>%
+  group_by(account_id) %>%
+  summarize(Nclients = n()) %>%
+  count(Nclients)
 
-
-
-
+# Number of transactions by account (maybe add per month)
+trans %>%
+  group_by(account_id) %>%
+  summarize(Ntrans = n()) %>%
+  count(Ntrans)

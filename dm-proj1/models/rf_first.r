@@ -5,8 +5,8 @@
 library(caret)
 library(randomForest)
 
-train <- read.csv('final_train.csv',sep = ',', header=TRUE)
-test <- read.csv('final_test.csv',sep = ',', header=TRUE)
+train <- read.csv('./final_train.csv',sep = ',', header=TRUE)
+test <- read.csv('./final_test.csv',sep = ',', header=TRUE)
 #test <- subset(test, select = -status )
 
 #table(train[,c('status', 'payments_loan')])

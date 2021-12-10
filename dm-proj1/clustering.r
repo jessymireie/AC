@@ -7,6 +7,8 @@ install.packages("magrittr")
 library("cluster")
 library("factoextra")
 library("magrittr")
+library("dplyr")
+
 
 # Loading and Preparing Datasets
 train <- read.csv('complete_train.csv',sep = ',', header=TRUE)
@@ -44,4 +46,6 @@ test <- test %>%
     gender == 'F' ~ 0,
     gender == 'M' ~ 2))
 
+# Partitioning clustering
+fviz_nbclust(train, kmeans, method = "gap_stat")
 

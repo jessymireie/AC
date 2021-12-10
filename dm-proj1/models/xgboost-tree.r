@@ -129,7 +129,27 @@ xgb_trcontrol_1 = trainControl(
 xgb_train_1 <- train(status~., data = filtered_train, method = 'xgbTree', 
                      metric="ROC", trControl = xgb_trcontrol_1, tuneGrid = xgb_grid_6)
 
-print(xgb_train_1)
+
+
+grid_test = expand.grid(
+  nrounds = c(150, 200, 300),
+  eta = c(0.1, 0.2),
+  max_depth = c(8, 10),
+  gamma = 1, 
+  colsample_bytree = c(0.25, 0.5, 0.75, 1),
+  min_child_weight = 1,
+  subsample =  c(0.5, 0.75, 1)
+)
+
+model_test <- train(status~., data = filtered_train, method = 'xgbTree', 
+                     metric="ROC", trControl = xgb_trcontrol_1, tuneGrid = grid_test)
+model_test$results %>% 
+  top_n(5, wt = ROC) %>%
+  arrange(desc(ROC))
+# eta max_depth gamma colsample_bytree min_child_weight subsample nrounds       ROC      Sens      Spec      ROCSD
+# 0.2        10     1             0.50                1      0.75     300 0.9095433 0.3644444 0.9929198 0.04592160
+
+print(model_test)
 
 # scatter plot of the AUC against max_depth and eta
 ggplot(xgb_train_1$results, aes(x = as.factor(eta), y = max_depth, size = ROC, color = ROC)) +
@@ -140,7 +160,7 @@ ggplot(xgb_train_1$results, aes(x = as.factor(eta), y = max_depth, size = ROC, c
 ######################################
 
 #Predict
-test$status <- predict(xgb_train_1, newdata = test, type='prob')
+test$status <- predict(model_test, newdata = test, type='prob')
 test$status
 
 results <- test[,c("loan_id","status")]
@@ -150,7 +170,7 @@ export <- results[,c("loan_id", "status_neg_prob")]
 names(export)[names(export) == 'loan_id' ] <- 'Id'
 names(export)[names(export) == 'status_neg_prob' ] <- 'Predicted'
 
-write.csv(export,"results/xgb_grid.csv", row.names = FALSE)
+write.csv(export,"./results/xgb_grid_boruta.csv", row.names = FALSE)
 
 ######################################
 

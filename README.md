@@ -6,30 +6,30 @@
 
 | Data Understanding  |  Status  |
 | ------------------- | ------------------- |
-|  Diversity of statistical methods |   |
-|  Complexity of statistical methods  |   |
-|  Interpretation of results of statistical methods  | |
-|  Knowledge extraction from results of statistical methods | |
-|  Diversity of plots |  |
-|  Complexity of plots |  |
-|  Presentation | |
-|  Interpretation of plots |  |
-|  Visual knowledge extraction | |
+|  Diversity of statistical methods | 7  |
+|  Complexity of statistical methods  | 7  |
+|  Interpretation of results of statistical methods  | 7|
+|  Knowledge extraction from results of statistical methods | 5 |
+|  Diversity of plots | 7 |
+|  Complexity of plots | 7 |
+|  Presentation | 7 |
+|  Interpretation of plots | 7 |
+|  Visual knowledge extraction | 9 |
 
 
 | Data Preparing  |  Status  |
 | ------------------- | ------------------- |
-|  Data integration | |
-|  Assessment of dimensions of data quality | |
-|  (Cleaning) redundancy | |
-|  (Cleaning) missing data | |
-|  (Cleaning) outliers | |
-|  Data transformation for compatibility with algorithms | |
-|  Feature engineering from tabular data | |
-|  Sampling for domain-specific purposes | |
-|  Sampling for development | |
-|  Imbalanced data | |
-|  Feature selection | |
+|  Data integration | 10 |
+|  Assessment of dimensions of data quality | 7 |
+|  (Cleaning) redundancy | 9 |
+|  (Cleaning) missing data | 3 |
+|  (Cleaning) outliers | 1 |
+|  Data transformation for compatibility with algorithms | 9 |
+|  Feature engineering from tabular data | 10 |
+|  Sampling for domain-specific purposes | 7 |
+|  Sampling for development | 7 |
+|  Imbalanced data | 9 |
+|  Feature selection | 9 |
 
 | Descriptive  |  Status  |
 | ------------------- | ------------------- |
@@ -44,31 +44,31 @@
 
 | Predictive  |  Status  |
 | ------------------- | ------------------- |
-| Diversity of tasks | |
-| Diversity of algorithms | |
-| Parameter tuning | |
-| Understanding algorithm behavior | |
-| (Performance estimation) training vs test | |
-| (Perfomance estimation) other factors (e.g. time) | |
-| (Performance estimation) perfomance measure | |
-| (Performance estimation) correct interpretation of performance measures | |
-| (Performance estimation) analysis of results | |
-| Model improvement | |
-| Feature importance | |
-| Analysis of "white-box" models | |
+| Diversity of tasks | 7 |
+| Diversity of algorithms | 9 |
+| Parameter tuning | 9 |
+| Understanding algorithm behavior | 9 |
+| (Performance estimation) training vs test | 9 |
+| (Perfomance estimation) other factors (e.g. time) | 5 |
+| (Performance estimation) perfomance measure | 9 |
+| (Performance estimation) correct interpretation of performance measures | 9 |
+| (Performance estimation) analysis of results | 5 |
+| Model improvement | 7 |
+| Feature importance | 9 |
+| Analysis of "white-box" models | 9 |
 
 |Pproject Management  |  Status  |
 | ------------------- | ------------------- |
-| Methodology | |
-| Plan | |
-| PM tools | |
-| (Tools) collaboration tools | |
+| Methodology | 9 |
+| Plan | 7 |
+| PM tools | 4 |
+| (Tools) collaboration tools | 4 |
 
 | Tools  |  Status  |
 | ------------------- | ------------------- |
-| Analytics | |
-| Database | |
-| Other tools (e.g. data cleaning, visualization) | |
+| Analytics | 7 |
+| Database | 9 |
+| Other tools (e.g. data cleaning, visualization) | 7 |
 
 | Presentation | Status |
 | ------------------- | ------------------- |

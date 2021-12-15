@@ -1,5 +1,10 @@
 # CLustering
 
+## Algorithm 1: K-means Clustering
+## Algorithm 2: Hierarchical Clustering
+## Algorithm 3: DBSCAN 
+
+
 #install.packages("factoextra")
 #install.packages("cluster")
 #install.packages("magrittr")
@@ -115,6 +120,15 @@ df_loans_stats %>%
 #   = df_boruta_rf_var, df_account_stats, df_boruta_var, df_clients, df_accounts
 
 ## Determining the optimal number of clusters
+
+# 2ª forma ?
+# (
+# gap_stat <- clusGap(df_boruta_rf_var, FUN = kmeans, nstart = 25, K.max = 10, B = 50)
+# fviz_gap_stat(gap_stat)
+# )
+
+# 3ª forma ?
+# fviz_nbclust(df_boruta_rf_var, kmeans, method = "silhouette")
 
 boruta_rf_nbClusters <- df_boruta_rf_var %>%
   scale() %>%

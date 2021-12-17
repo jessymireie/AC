@@ -2,7 +2,6 @@
 
 ## Algorithm 1: K-means Clustering
 ## Algorithm 2: Hierarchical Clustering
-## Algorithm 3: DBSCAN 
 
 
 #install.packages("factoextra")
@@ -66,6 +65,9 @@ df_loans_stats <-  train[,c("age_at_loan", "duration_loan", "payments_loan", "av
 df_loans_stats$amount_loan <- df_loans_stats$duration_loan * df_loans_stats$payments_loan
 
 
+df_people <-  train[,c("gender", "age", "avg_salary", "avg_monthly_balance", "avg_balance","avg_amount", "num_credit")]
+
+
 # df_clients, df_accounts, df_districts, df_rfe_var, df_boruta_var, df_boruta_rf_var, df_account_stats, df_loans_stats
 
 
@@ -116,6 +118,11 @@ df_loans_stats %>%
   get_clust_tendency(n = 50, gradient = gradient.color)
 # $hopkins_stat = 0.7374299
 
+df_people %>%
+  scale() %>%
+  get_clust_tendency(n = 50, gradient = gradient.color)
+# $hopkins_stat = 0.7354357
+
 # We'll be keeping the dataframe that got a hopkins score of >80%
 #   = df_boruta_rf_var, df_account_stats, df_boruta_var, df_clients, df_accounts
 
@@ -130,25 +137,15 @@ df_loans_stats %>%
 # 3ª forma ?
 # fviz_nbclust(df_boruta_rf_var, kmeans, method = "silhouette")
 
-boruta_rf_nbClusters <- df_boruta_rf_var %>%
-  scale() %>%
-  NbClust(distance = "euclidean",
-          min.nc = 2, max.nc = 9, 
-          method = "complete", index ="all") 
-fviz_nbclust(boruta_rf_nbClusters, ggtheme = theme_minimal()) # Suggests 2
-# Cluster Plot
-boruta_rf_km <- kmeans(df_boruta_rf_var, 2)
-fviz_cluster(boruta_rf_km, data = df_boruta_rf_var,
-             ellipse.type = "convex",
-             palette = "jco",
-             ggtheme = theme_minimal())
-# Cluster's Stats
-boruta_rf_km$centers
+#install.packages("fpc")
 #   num_credit min_credit median_credit iqr_credit min_withdrawal iqr_withdrawal avg_amount median_amount min_balance median_balance time_bf_loan payments_loan
 #1   28.84456   48.33834      2657.380   15457.22       749.6658       5944.038   916.1461     -217.9956    571.8528       32875.33     9412.611      3695.865
 #2   32.65926   67.42963      9774.816   31830.70       482.8230      12655.210  1084.3762     -587.2733    713.5844       54464.95     9606.289      4801.511
 
 ###
+
+df_account_stats <-  train[,c("avg_salary", "avg_monthly_balance", "median_balance", "iqr_balance",
+                              "min_balance", "max_balance", "avg_balance", "num_credit", "avg_credit")]
 
 account_stats_nbClusters <- df_account_stats %>%
   scale() %>%
@@ -159,9 +156,15 @@ fviz_nbclust(account_stats_nbClusters, ggtheme = theme_minimal()) # Suggests 3
 # Cluster Plot
 account_stats_km <- kmeans(df_account_stats, 3)
 fviz_cluster(account_stats_km, data = df_account_stats,
+             ellipse = FALSE,
              ellipse.type = "convex",
              palette = "jco",
-             ggtheme = theme_minimal())
+             ggtheme = theme_minimal(),
+             show.clust.cent = TRUE,
+             choose.vars = c("avg_monthly_balance", "avg_credit"), 
+             main="Clusters for Client's Profiles",
+             xlab="Average monthly balance of the account",
+             ylab="Average Credit Amount",)
 # Cluster's Stats
 account_stats_km$centers
 #   avg_salary avg_monthly_balance median_balance iqr_balance min_balance max_balance avg_balance
@@ -244,6 +247,24 @@ fviz_cluster(accounts_km, data = df_accounts,
 # Cluster's Stats
 accounts_km$centers
 
+###
+
+people_nbClusters <- df_people %>%
+  scale() %>%
+  NbClust(distance = "euclidean",
+          min.nc = 2, max.nc = 9, 
+          method = "complete", index ="all") 
+fviz_nbclust(people_nbClusters, ggtheme = theme_minimal()) # Suggests 5
+# Cluster Plot
+people_km <- kmeans(df_people, 2)
+fviz_cluster(people_km, data = df_people,
+             ellipse.type = "convex",
+             palette = "jco",
+             ggtheme = theme_minimal())
+# Cluster's Stats
+people_km$centers
+
+
 ###   df_clients
 
 ## Cluster Validation Statistics
@@ -275,7 +296,7 @@ account_stats_hc <- df_account_stats %>%
   scale() %>%
   eclust("hclust", k = 3, graph = FALSE)
 fviz_dend(account_stats_hc, palette = "jco",
-          rect = TRUE, show_labels = FALSE)
+          rect = TRUE, show_labels = FALSE, h = 10)
 # Silhouette Diagram
 fviz_silhouette(account_stats_hc)
 # Silhouette width of observations

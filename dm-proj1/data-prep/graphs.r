@@ -50,11 +50,11 @@ ggplot(loans, aes(x = month, group = status, fill = status)) +
 
 ####### PLOTS #########
 
-df <- read.csv('./complete_train.csv',sep = ';', header=TRUE)
+df <- read.csv('./complete_train.csv',sep = ',', header=TRUE)
 
 ## Scatter Plot 
 # looking for any connection between the Age and Average Salary
-ggscatter(df, x = "age", y = "average_salary", 
+ggscatter(df, x = "age", y = "avg_salary", 
           add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "pearson",
           xlab = "Age", ylab = "Average Salary")
@@ -101,47 +101,42 @@ ggplot(loans, aes(x = year, group = status, fill = status)) +
 #####################################################
 
 # Loan's Acceptance Rate in function of the loan's amount
-ggplot(df, aes(x = status, y = loan_amount)) +
+ggplot(df, aes(x = status, y = payments_loan*duration_loan)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to loan amount")
 
 # Loan's Acceptance Rate in function of the loan's payments
-ggplot(df, aes(x = status, y = payments)) +
+ggplot(df, aes(x = status, y = payments_loan)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to loan monthly paymenrs")
 
 # Loan's Acceptance Rate in function of the loan's duration
-ggplot(df, aes(x = status, y = loan_duration)) +
+ggplot(df, aes(x = status, y = duration_loan)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to loan duration")
 
 # Loan's Acceptance Rate in function of the client's average salary
-ggplot(df, aes(x = status, y = average_salary)) +
+ggplot(df, aes(x = status, y = avg_salary)) +
   geom_boxplot() +
   ggtitle("Loans' Results in function of the Client's District's Average Salary")
 
 # Loan's Acceptance Rate in function of the client's region's crime rate in 96 
-ggplot(df, aes(x = status, y = crime96_S)) +
+ggplot(df, aes(x = status, y = crime_96)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to client's district crime rate in 96")
 
 # Loan's Acceptance Rate in function of the client's region's crime rate in 95
-ggplot(df, aes(x = status, y = crime95_S)) +
+ggplot(df, aes(x = status, y = crime_95)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to client's district crime rate in 95")
 
-# Loan's Acceptance Rate in function of the client's region's unemployment rate in 95 
-ggplot(df, aes(x = status, y = unemployment95)) +
-  geom_boxplot() +
-  ggtitle("Accepted loans according to client's district unemployment rate in 95")
-
 # Loan's Acceptance Rate in function of the client's region's unemployment rate in 96
-ggplot(df, aes(x = status, y = unemployment96)) +
+ggplot(df, aes(x = status, y = unemployment_96)) +
   geom_boxplot() +
   ggtitle("Accepted loans according to client's district unemployment rate in 96")
 
 # Loan's Acceptance Rate in function of the client's region's nb of entrepreneurs per 1000 inhabitants 
-ggplot(df, aes(x = status, y = nb_enterpreneurs_per1000)) +
+ggplot(df, aes(x = status, y = nb_entrepeneurs)) +
   geom_boxplot() +
   ggtitle("Loans' Results in function of the Client's District's Number of Entrepreneurs per 1000 inhabitants")
 
@@ -178,7 +173,7 @@ ggplot(df, aes(x = gender, group = status, fill = status)) +
   ggtitle("Gender's impact on loan's success")
 
 # Account's Frequency Access Impact on loan's success 
-ggplot(df, aes(x = account_freq_access, group = status, fill = status)) +
+ggplot(df, aes(x = frequency_num, group = status, fill = status)) +
   geom_bar(position = "fill") +
   ggtitle("Account's Frequency Access impact on loan's success")
 
@@ -190,8 +185,8 @@ ggplot(df, aes(x = loan_date_month, group = status, fill = status)) +
 ####
 
 # Jitter Plot for Account Frequency Access
-ggplot(df, aes(status, account_freq_access)) +
-  geom_jitter(aes(color = account_freq_access), size = 0.5)
+ggplot(df, aes(status, frequency_num)) +
+  geom_jitter(aes(color = frequency_num), size = 0.5)
 
 ####
 
@@ -201,7 +196,11 @@ qplot(age, data = df, geom = "density",
 
 ####
 
-df_num <- subset(df_num, select = -status )
+df_num <- subset(df, select = -status )
+df_num <- df_num %>% mutate(card_num = case_when(card_num == 'none' ~ 0, card_num == 'classic' ~ 1, card_num == 'junior' ~ 2, card_num == 'gold' ~ 3))
+df_num <- df_num %>% mutate(frequency_num = case_when( frequency_num == 'monthly issuance' ~ 0, frequency_num == 'weekly issuance' ~ 1, frequency_num == 'issuance after transaction' ~ 2))
+df_num <- df_num %>% mutate(gender = case_when(gender == 'F' ~ -1, gender == 'M' ~ 1))
+
 
 # 1. Compute correlation
 # Can be run using 3 different methods : 1- pearson, 2- kendall, 3-spearman -- pearson is considered the most fitting overall
@@ -243,7 +242,7 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 #######################
 
 library("PerformanceAnalytics")
-# Overall Analytics, probably more useful of df with fewer columns
+# Overall Analytics, probably more useful if df had fewer columns
 chart.Correlation(df_num, histogram=TRUE, pch=19)
 
 #######################
@@ -297,7 +296,7 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
 
 ###########################################
 
-df_loans <- df_num[,c("gender","age", "average_salary", "loan_amount", "loan_duration", "payments", "loan_date_year", "loan_date_monthNB")]
+df_loans <- df_num[,c("gender","age", "avg_salary", "duration_loan", "payments_loan")]
 
 cormat <- round(cor(df_loans, method = "pearson"),2)
 corrplot(cormat, type = "upper", order = "hclust", 
@@ -335,17 +334,3 @@ ggplot(melted_cormat, aes(Var2, Var1, fill = value))+
     legend.direction = "horizontal")+
   guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
                                title.position = "top", title.hjust = 0.5))
-
-
-
-
-
-
-
-
-
-
-
-
-
-

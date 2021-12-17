@@ -78,7 +78,7 @@ print(model2)
 
 ### GRID
 
-grid <- expand.grid(size=c(1, 3, 5, 7, 9), decay=seq(0, 2, by = 0.05))
+grid <- expand.grid(size=c(1, 3, 5, 7, 9, 11, 13, 15), decay=seq(0, 2, by = 0.05))
 model3 <- train(status~., data = train, method = 'nnet', metric="ROC", tuneGrid = grid,  trControl = control)
 print(model3)
 model3$results %>% 

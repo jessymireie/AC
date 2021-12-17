@@ -7,36 +7,13 @@ library(purrr)
 # Loading and Preparing Datasets
 train <- read.csv('complete_train.csv',sep = ',', header=TRUE)
 test <- read.csv('complete_test.csv',sep = ',', header=TRUE)
-train <- train %>%
-  mutate(card_num = case_when(
-    card_num == 'none' ~ 0,
-    card_num == 'classic' ~ 1,
-    card_num == 'junior' ~ 2,
-    card_num == 'gold' ~ 3))
-test <- test %>%
-  mutate(card_num = case_when(
-    card_num == 'none' ~ 0,
-    card_num == 'classic' ~ 1,
-    card_num == 'junior' ~ 2,
-    card_num == 'gold' ~ 3))
-train <- train %>%
-  mutate(frequency_num = case_when(
-    frequency_num == 'monthly issuance' ~ 0,
-    frequency_num == 'weekly issuance' ~ 1,
-    frequency_num == 'issuance after transaction' ~ 2))
-test <- test %>%
-  mutate(frequency_num = case_when(
-    frequency_num == 'monthly issuance' ~ 0,
-    frequency_num == 'weekly issuance' ~ 1,
-    frequency_num == 'issuance after transaction' ~ 2))
-train <- train %>%
-  mutate(gender = case_when(
-    gender == 'F' ~ 0,
-    gender == 'M' ~ 2))
-test <- test %>%
-  mutate(gender = case_when(
-    gender == 'F' ~ 0,
-    gender == 'M' ~ 2))
+train <- train %>%  mutate(card_num = case_when(card_num == 'none' ~ 0, card_num == 'classic' ~ 1, card_num == 'junior' ~ 2, card_num == 'gold' ~ 3))
+test <- test %>%  mutate(card_num = case_when(card_num == 'none' ~ 0, card_num == 'classic' ~ 1,card_num == 'junior' ~ 2, card_num == 'gold' ~ 3))
+train <- train %>% mutate(frequency_num = case_when(frequency_num == 'monthly issuance' ~ 0,frequency_num == 'weekly issuance' ~ 1, frequency_num == 'issuance after transaction' ~ 2))
+test <- test %>%  mutate(frequency_num = case_when( frequency_num == 'monthly issuance' ~ 0,frequency_num == 'weekly issuance' ~ 1, frequency_num == 'issuance after transaction' ~ 2))
+train <- train %>%mutate(gender = case_when(gender == 'F' ~ 0,gender == 'M' ~ 2))
+test <- test %>%  mutate(gender = case_when(gender == 'F' ~ 0,gender == 'M' ~ 2))
+
 
 # Converting 'status' to a factor
 train$status <- factor(train$status)
@@ -53,7 +30,7 @@ rm(trainIndex)
 test_roc <- function(model, data) {
   
   roc(data$status,
-      predict(model, data, type = "prob")[, "Failed"])
+      predict(model, data, type = "prob")[, "Succeeded"])
   
 }
 
@@ -70,12 +47,12 @@ model_1 <- train(status ~ ., data = data_train, method = "xgbTree", verbose = FA
 model_1$results %>% 
   top_n(5, wt = ROC) %>%
   arrange(desc(ROC))
-## BEST ROC : 0.8539522
+## BEST ROC : 0.8361335
 
 model_1 %>%
   test_roc(data = data_test) %>%
   auc()
-# Area under the curve: 0.7494
+# Area under the curve: 0.7675
 
 
 ## Handling class imbalance with weighted or sampling methods

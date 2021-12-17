@@ -46,6 +46,15 @@ xgb_grid_1 = expand.grid(
   min_child_weight = 1,
   subsample = 1
 )
+xgb_train_1 <- train(status~., data = train, method = 'xgbTree', 
+                     metric="ROC", trControl = control, tuneGrid = xgb_grid_1)
+
+xgb_train_1$results %>% 
+  top_n(5, wt = ROC) %>%
+  arrange(desc(ROC))
+
+plot(xgb_grid_1)
+
 # eta   max_depth  nrounds  ROC        Sens       Spec 
 #0.30   6         100      0.8610540  0.3266667  0.9894110
 # BORUTA

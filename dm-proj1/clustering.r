@@ -59,7 +59,7 @@ df_boruta_rf_var <-  train[,c("num_credit", "min_credit", "median_credit", "iqr_
 
 
 df_account_stats <-  train[,c("avg_salary", "avg_monthly_balance", "median_balance", "iqr_balance",
-                              "min_balance", "max_balance", "avg_balance")]
+                              "min_balance", "max_balance", "avg_balance", "num_credit", "avg_credit")]
 
 df_loans_stats <-  train[,c("age_at_loan", "duration_loan", "payments_loan", "avg_monthly_balance")]
 df_loans_stats$amount_loan <- df_loans_stats$duration_loan * df_loans_stats$payments_loan
@@ -294,9 +294,9 @@ sil_boruta_rf[neg_sil_index_boruta_rf, , drop = FALSE]
 # Hierarchical Dendogram
 account_stats_hc <- df_account_stats %>%
   scale() %>%
-  eclust("hclust", k = 3, graph = FALSE)
+  eclust("hclust", k = 2, graph = FALSE)
 fviz_dend(account_stats_hc, palette = "jco",
-          rect = TRUE, show_labels = FALSE, h = 10)
+          rect = TRUE, show_labels = FALSE)
 # Silhouette Diagram
 fviz_silhouette(account_stats_hc)
 # Silhouette width of observations
@@ -338,4 +338,53 @@ neg_sil_index_clients <- which(sil_clients[, 'sil_width'] < 0)
 sil_clients[neg_sil_index_clients, , drop = FALSE]
 
 ###
+
+
+
+df_loans_stats <-  train[,c("age_at_loan", "duration_loan", "payments_loan", "avg_monthly_balance")]
+df_loans_stats$amount_loan <- df_loans_stats$duration_loan * df_loans_stats$payments_loan
+df_loans_stats$age_at_loan <- df_loans_stats$age_at_loan/10000
+
+
+loans_nbClusters <- df_loans_stats %>%
+  scale() %>%
+  NbClust(distance = "euclidean",
+          min.nc = 2, max.nc = 9, 
+          method = "complete", index ="all") 
+fviz_nbclust(loans_nbClusters, ggtheme = theme_minimal()) # Suggests 2
+# Cluster Plot
+loans_km <- kmeans(df_loans_stats, 2)
+fviz_cluster(loans_km, data = df_loans_stats,
+             ellipse = FALSE,
+             ellipse.type = "convex",
+             palette = "jco",
+             show.clust.cent = TRUE,
+             ggtheme = theme_minimal())
+
+fviz_cluster(loans_km, data = df_loans_stats,
+             ellipse = FALSE,
+             ellipse.type = "convex",
+             palette = "jco",
+             ggtheme = theme_minimal(),
+             show.clust.cent = TRUE,
+             choose.vars = c("amount_loan", "age_at_loan"), 
+             main="Clusters for Loans's Profiles",
+             xlab="Age at Loan",
+             ylab="Loan Amount",)
+# Cluster's Stats
+loans_km$centers
+
+# Hierarchical Dendogram
+loans_hc <- df_loans_stats %>%
+  scale() %>%
+  eclust("hclust", k = 2, graph = FALSE)
+fviz_dend(loans_hc, palette = "jco",
+          rect = TRUE, show_labels = FALSE)
+# Silhouette Diagram
+fviz_silhouette(loans_hc)
+# Silhouette width of observations
+sil_loans <- loans_hc$silinfo$widths[, 1:3]
+# Objects with negative silhouette
+neg_sil_index_loans <- which(sil_loans[, 'sil_width'] < 0)
+sil_loans[neg_sil_index_loans, , drop = FALSE]
 
